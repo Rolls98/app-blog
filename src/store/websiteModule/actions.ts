@@ -34,4 +34,20 @@ export default {
       console.log("Erreur");
     }
   },
+  async fetchCategories({
+    commit,
+    state,
+  }: {
+    commit: any;
+    state: WebsiteState;
+  }): Promise<void> {
+    const userService = new AppService();
+    const result = await userService.getCategories();
+
+    if (!result.status) {
+      commit("updateCategories", result);
+    } else {
+      console.log("Erreur");
+    }
+  },
 };

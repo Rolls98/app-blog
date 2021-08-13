@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import Videos from "@/views/Videos.vue";
 import Blog from "@/views/Blog.vue";
 import Video from "@/views/Video.vue";
+import Article from "@/views/Article.vue";
 
 Vue.use(VueRouter);
 
@@ -14,12 +15,17 @@ const routes: Array<RouteConfig> = [
     component: Home,
   },
   {
+    path: "/Articles/:id",
+    name: "Article",
+    component: Article,
+  },
+  {
     path: "/Blog",
     name: "Blog",
     component: Blog,
   },
   {
-    path: "/Video",
+    path: "/Videos/:id",
     name: "Video",
     component: Video,
   },

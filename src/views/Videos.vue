@@ -6,128 +6,46 @@
         <div class="row">
           <div class="col-lg-8">
             <div class="row">
-              <div class="col-lg-6">
+              <div class="col-lg-6" v-for="(video, i) in getItems" :key="i">
                 <div class="article article-video">
-                  <video controls>
-                    <source
-                      src="”http://techslides.com/demos/sample-videos/small.ogv”"
-                      type="video/ogg"
-                    />
-                    <source
-                      src="/build/videos/arcnet.io(7-sec).mp4"
-                      type="video/mp4"
-                    />
-                  </video>
+                  <yanVideo :sources="getSource(video.url)"></yanVideo>
                   <div class="description">
                     <div class="meta">
-                      <span class="meta-span"> jan/22/2021</span>
-                      <span class="meta-category">Bien-être</span>
+                      <span class="meta-span">
+                        {{ getDate(video.createdAt) }}</span
+                      >
+                      <span class="meta-category">{{
+                        video.categorie.libelle
+                      }}</span>
                     </div>
                     <h3>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Eligendi, iste.
+                      {{ video.content | truncate(15, "...") }}
                     </h3>
 
-                    <div class="player-icon">
+                    <!-- <div class="player-icon">
                       <span class="material-icons-outlined"> play_circle </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="article article-video">
-                  <video controls>
-                    <source
-                      src="”http://techslides.com/demos/sample-videos/small.ogv”"
-                      type="video/ogg"
-                    />
-                    <source
-                      src="/build/videos/arcnet.io(7-sec).mp4"
-                      type="video/mp4"
-                    />
-                  </video>
-                  <div class="description">
-                    <div class="meta">
-                      <span class="meta-span"> jan/22/2021</span>
-                      <span class="meta-category">Bien-être</span>
-                    </div>
-                    <h3>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Eligendi, iste.
-                    </h3>
-
-                    <div class="player-icon">
-                      <span class="material-icons-outlined"> play_circle </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="article article-video">
-                  <video controls>
-                    <source
-                      src="”http://techslides.com/demos/sample-videos/small.ogv”"
-                      type="video/ogg"
-                    />
-                    <source
-                      src="/build/videos/arcnet.io(7-sec).mp4"
-                      type="video/mp4"
-                    />
-                  </video>
-                  <div class="description">
-                    <div class="meta">
-                      <span class="meta-span"> jan/22/2021</span>
-                      <span class="meta-category">Bien-être</span>
-                    </div>
-                    <h3>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Eligendi, iste.
-                    </h3>
-
-                    <div class="player-icon">
-                      <span class="material-icons-outlined"> play_circle </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="article article-video">
-                  <video controls>
-                    <source
-                      src="”http://techslides.com/demos/sample-videos/small.ogv”"
-                      type="video/ogg"
-                    />
-                    <source
-                      src="/build/videos/arcnet.io(7-sec).mp4"
-                      type="video/mp4"
-                    />
-                  </video>
-                  <div class="description">
-                    <div class="meta">
-                      <span class="meta-span"> jan/22/2021</span>
-                      <span class="meta-category">Bien-être</span>
-                    </div>
-                    <h3>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Eligendi, iste.
-                    </h3>
-
-                    <div class="player-icon">
-                      <span class="material-icons-outlined"> play_circle </span>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
 
               <!-- pagination -->
               <div class="m-pagination text-center">
-                <ul>
+                <paginate
+                  :page-count="getPageCount"
+                  :click-handler="clickCallback"
+                  prev-text="<"
+                  next-text=">"
+                  :container-class="'className'"
+                >
+                </paginate>
+                <!-- <ul>
                   <li class="active-p">1</li>
                   <li>2</li>
                   <li>3</li>
                   <li>4</li>
                   <li class="list-span">suivant</li>
-                </ul>
+                </ul> -->
               </div>
               <!-- pub box -->
               <div class="card mt-5" style="padding: 1.5rem" />
@@ -167,10 +85,12 @@
               <div class="cat-widget mt-5">
                 <h3 class="sibar-t">categorie</h3>
                 <ul>
-                  <li><a href="">categorie 1</a></li>
-                  <li><a href="">categorie 2</a></li>
+                  <li v-for="(categorie, n) in categories" :key="n">
+                    <a href="">{{ categorie.libelle }}</a>
+                  </li>
+                  <!-- <li><a href="">categorie 2</a></li>
                   <li><a href="">categorie 3</a></li>
-                  <li><a href="">categorie 4</a></li>
+                  <li><a href="">categorie 4</a></li> -->
                 </ul>
               </div>
               <div class="cat-widget mt-5">
@@ -204,13 +124,92 @@
 </template>
 
 <script lang="ts">
+import { Ivideo } from "@/interfaces/video.interface";
+import yanVideo from "@/components/video.vue";
 import Vue from "vue";
+import { Icategorie } from "@/interfaces/articles.interface";
 export default Vue.extend({
-  // components: {
-  //   defaultLayout,
+  components: {
+    yanVideo,
+  },
+  filters: {
+    truncate(text: string, length: number, suffix: string) {
+      if (text.length > length) {
+        return text.substring(0, length) + suffix;
+      } else {
+        return text;
+      }
+    },
+  },
+  data() {
+    return {
+      parPage: 1,
+      currentPage: 1,
+    };
+  },
+  methods: {
+    clickCallback: function (pageNum: number) {
+      this.currentPage = Number(pageNum);
+    },
+    getDate(localDate: string) {
+      let myDate = new Date(localDate);
+      return myDate.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    },
+    getSource(url: string): any {
+      return [
+        {
+          type: "video/mp4",
+          // src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
+          src: url,
+        },
+      ];
+    },
+  },
+  computed: {
+    getItems(): Ivideo[] {
+      if (this.videos) {
+        let current = this.currentPage * this.parPage;
+        let start = current - this.parPage;
+        return this.videos.slice(start, current);
+      }
+      return new Object() as Ivideo[];
+    },
+    getPageCount(): number {
+      if (this.videos) {
+        return Math.ceil(this.videos.length / this.parPage);
+      }
+      return 0;
+    },
+    videos(): Ivideo[] {
+      return this.$store.getters["websiteModule/videos"];
+    },
+    categories(): Icategorie[] {
+      return this.$store.getters["websiteModule/categories"];
+    },
+  },
+  // beforeMount() {
+  //   this.videos = this.$store.getters["websiteModule/videos"];
   // },
 });
 </script>
 
 <style>
+.m-pagination a {
+  vertical-align: middle !important;
+}
+.m-pagination ul li:hover {
+  background-color: #1b6068;
+  color: white;
+}
+.m-pagination ul li a:hover {
+  color: white;
+}
+.m-pagination ul li .active {
+  background-color: #1b6068;
+  color: white;
+}
 </style>

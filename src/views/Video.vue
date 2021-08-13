@@ -10,17 +10,20 @@
                 <div class="col-12">
                   <div class="article-blog">
                     <h1 class="article-blog-title">
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                      {{ video.title }}
                     </h1>
                     <div class="meta">
-                      <span class="meta-span"> Autor-name</span>
-                      <span class="meta-span"> jan/22/2021</span>
+                      <span class="meta-span"> {{ video.author }}</span>
+                      <span class="meta-span">
+                        {{ getDate(video.createdAt) }}</span
+                      >
                       <span class="material-icons-outlined meta-span">
                         share</span
                       >
                     </div>
                     <div class="illustration">
-                      <video controls>
+                      <yanVideo :sources="getSource(video.url)"></yanVideo>
+                      <!-- <video controls>
                         <source
                           src="”http://techslides.com/demos/sample-videos/small.ogv”"
                           type="video/ogg"
@@ -29,25 +32,11 @@
                           src="/build/videos/arcnet.io(7-sec).mp4"
                           type="video/mp4"
                         />
-                      </video>
+                      </video> -->
                     </div>
                     <div class="description">
                       <p>
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Quae tenetur amet odio, illo nihil, dolores ullam
-                        ab perspiciatis accusantium molestias possimus
-                        consequatur corporis facere quos labore, dignissimos
-                        enim quas laboriosam delectus ex quibusdam voluptatibus.
-                        Ea, deleniti aut. Laborum magni itaque vel, magnam
-                        exercitationem iste ad, natus perspiciatis iure
-                        assumenda debitis adipisci atque voluptatem dignissimos
-                        enim aspernatur repellat? Voluptatum distinctio tenetur
-                        sunt quis, mollitia eveniet consequatur amet maiores
-                        optio enim nostrum laborum deserunt est molestiae quidem
-                        eos quisquam, dolores sapiente alias? Voluptatem,
-                        incidunt! At beatae excepturi aut velit illo? Qui, quo
-                        possimus! Consequatur ratione illo tenetur accusantium
-                        repudiandae vel facere tempora!
+                        {{ video.content }}
                       </p>
                     </div>
                     <hr class="hr" />
@@ -131,10 +120,9 @@
               <div class="cat-widget mt-5">
                 <h3 class="sibar-t">categorie</h3>
                 <ul>
-                  <li><a href="">categorie 1</a></li>
-                  <li><a href="">categorie 2</a></li>
-                  <li><a href="">categorie 3</a></li>
-                  <li><a href="">categorie 4</a></li>
+                  <li v-for="(categorie, n) in categories" :key="n">
+                    <a href="">{{ categorie.libelle }}</a>
+                  </li>
                 </ul>
               </div>
               <div class="cat-widget mt-5">
@@ -168,14 +156,95 @@
 </template>
 
 <script lang="ts">
+import {
+  IArticle,
+  Icategorie,
+  ICommentArticle,
+} from "@/interfaces/articles.interface";
+import yanVideo from "@/components/video.vue";
+import { ICommentVideo, Ivideo } from "@/interfaces/video.interface";
+import { AppService } from "@/services/app.service";
 import Vue from "vue";
 // import defaultLayout from "./../layouts/defaultLayout.vue";
 export default Vue.extend({
-  //   components: {
-  //     defaultLayout,
-  //   },
+  components: {
+    yanVideo,
+  },
+  data() {
+    return {
+      video: {} as Ivideo,
+      comments: [] as ICommentVideo[],
+    };
+  },
+  filters: {
+    truncate(text: string, length: number, suffix: string) {
+      if (text.length > length) {
+        return text.substring(0, length) + suffix;
+      } else {
+        return text;
+      }
+    },
+  },
+  computed: {
+    fourVideos(): Ivideo[] {
+      return this.$store.getters["websiteModule/videos"]
+        ? this.$store.getters["websiteModule/videos"].slice(0, 4)
+        : "";
+    },
+    categories(): Icategorie[] {
+      return this.$store.getters["websiteModule/categories"];
+    },
+  },
+  methods: {
+    getSource(url: string): any {
+      return [
+        {
+          type: "video/mp4",
+          // src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
+          src: url,
+        },
+      ];
+    },
+    async getVideo(): Promise<void> {
+      let myId = parseInt(this.$route.params.id);
+      const userService = new AppService();
+      const result = await userService.getOneVideo({ id: myId });
+
+      if (!result.status) {
+        // console.log(result);
+        this.video = result[0] as Ivideo;
+      } else {
+        console.log("Erreur");
+      }
+    },
+    async getCommentsArticle(): Promise<void> {
+      let myId = parseInt(this.$route.params.id);
+      const userService = new AppService();
+      const result = await userService.getCommentsVideo({ id: myId });
+
+      if (!result.status) {
+        console.log(result, "commentaire ");
+        this.comments = result;
+      } else {
+        console.log("Erreur");
+      }
+    },
+    getDate(localDate: string) {
+      let myDate = new Date(localDate);
+      return myDate.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    },
+  },
+  beforeMount() {
+    this.getVideo();
+    this.getCommentsArticle();
+  },
 });
 </script>
+
 
 <style>
 </style>

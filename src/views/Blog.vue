@@ -7,118 +7,21 @@
           <div class="col-lg-8">
             <div class="row">
               <div class="row mt-5">
-                <div class="col-12">
+                <div class="col-12" v-for="(article, i) in getItems" :key="i">
                   <div class="article-blog">
-                    <h3 class="article-blog-title">Article title</h3>
+                    <h3 class="article-blog-title">{{ article.title }}</h3>
                     <div class="meta">
-                      <span class="meta-span"> Autor-name</span>
-                      <span class="meta-span"> jan/22/2021</span>
-                    </div>
-                    <div class="illustration">
-                      <img
-                        src="../assets/img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="imf-fluid"
-                      />
-                    </div>
-                    <div class="description">
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Pariatur reiciendis voluptates ipsum alias excepturi
-                        tempora perferendis labore iste ullam eos sequi, fugiat
-                        fugit dignissimos eius similique exercitationem quaerat
-                        accusantium at sapiente repellendus assumenda non. Error
-                        eum dicta cum odit expedita.
-                      </p>
-                      <a href="detail-artile.html">
-                        <button class="s-moreBtn">Lire la suite</button></a
+                      <span class="meta-span"> {{ article.author }}</span>
+                      <span class="meta-span">
+                        {{ getDate(article.createdAt) }}</span
                       >
                     </div>
-                    <hr class="hr" />
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="article-blog">
-                    <h3 class="article-blog-title">Article title</h3>
-                    <div class="meta">
-                      <span class="meta-span"> Autor-name</span>
-                      <span class="meta-span"> jan/22/2021</span>
-                    </div>
                     <div class="illustration">
-                      <img
-                        src="../assets/img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="imf-fluid"
-                      />
+                      <img :src="article.image" alt="" class="imf-fluid" />
                     </div>
                     <div class="description">
                       <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Pariatur reiciendis voluptates ipsum alias excepturi
-                        tempora perferendis labore iste ullam eos sequi, fugiat
-                        fugit dignissimos eius similique exercitationem quaerat
-                        accusantium at sapiente repellendus assumenda non. Error
-                        eum dicta cum odit expedita.
-                      </p>
-                      <a href="detail-artile.html">
-                        <button class="s-moreBtn">Lire la suite</button></a
-                      >
-                    </div>
-                    <hr class="hr" />
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="article-blog">
-                    <h3 class="article-blog-title">Article title</h3>
-                    <div class="meta">
-                      <span class="meta-span"> Autor-name</span>
-                      <span class="meta-span"> jan/22/2021</span>
-                    </div>
-                    <div class="illustration">
-                      <img
-                        src="../assets/img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="imf-fluid"
-                      />
-                    </div>
-                    <div class="description">
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Pariatur reiciendis voluptates ipsum alias excepturi
-                        tempora perferendis labore iste ullam eos sequi, fugiat
-                        fugit dignissimos eius similique exercitationem quaerat
-                        accusantium at sapiente repellendus assumenda non. Error
-                        eum dicta cum odit expedita.
-                      </p>
-                      <a href="detail-artile.html">
-                        <button class="s-moreBtn">Lire la suite</button></a
-                      >
-                    </div>
-                    <hr class="hr" />
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="article-blog">
-                    <h3 class="article-blog-title">Article title</h3>
-                    <div class="meta">
-                      <span class="meta-span"> Autor-name</span>
-                      <span class="meta-span"> jan/22/2021</span>
-                    </div>
-                    <div class="illustration">
-                      <img
-                        src="../assets/img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="imf-fluid"
-                      />
-                    </div>
-                    <div class="description">
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Pariatur reiciendis voluptates ipsum alias excepturi
-                        tempora perferendis labore iste ullam eos sequi, fugiat
-                        fugit dignissimos eius similique exercitationem quaerat
-                        accusantium at sapiente repellendus assumenda non. Error
-                        eum dicta cum odit expedita.
+                        {{ article.content | truncate(45, "...") }}
                       </p>
                       <a href="detail-artile.html">
                         <button class="s-moreBtn">Lire la suite</button></a
@@ -130,13 +33,14 @@
               </div>
               <!-- pagination -->
               <div class="m-pagination">
-                <ul>
-                  <li class="active-p">1</li>
-                  <li>2</li>
-                  <li>3</li>
-                  <li>4</li>
-                  <li class="list-span">suivant</li>
-                </ul>
+                <paginate
+                  :page-count="getPageCount"
+                  :click-handler="clickCallback"
+                  prev-text="<"
+                  next-text=">"
+                  :container-class="'className'"
+                >
+                </paginate>
               </div>
             </div>
           </div>
@@ -153,63 +57,21 @@
               </div>
               <div class="cat-widget mt-5">
                 <h3 class="sibar-t">Articles récents</h3>
-                <a href="">
+                <a href="" v-for="(article, i) in someArticles" :key="i">
                   <div class="recents d-flex">
                     <div class="img-r">
-                      <img
-                        src="../assets/img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="img-fluid"
-                      />
+                      <img :src="article.image" alt="" class="img-fluid" />
                     </div>
-                    <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
-                  </div>
-                </a>
-
-                <a href="">
-                  <div class="recents d-flex">
-                    <div class="img-r">
-                      <img
-                        src="../assets/img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </div>
-                    <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
-                  </div>
-                </a>
-                <a href="">
-                  <div class="recents d-flex">
-                    <div class="img-r">
-                      <img
-                        src="../assets/img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </div>
-                    <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
-                  </div>
-                </a>
-                <a href="">
-                  <div class="recents d-flex">
-                    <div class="img-r">
-                      <img
-                        src="../assets/img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </div>
-                    <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
+                    <p>{{ article.content | truncate(10, "...") }}</p>
                   </div>
                 </a>
               </div>
               <div class="cat-widget mt-5">
                 <h3 class="sibar-t">categorie</h3>
                 <ul>
-                  <li><a href="">categorie 1</a></li>
-                  <li><a href="">categorie 2</a></li>
-                  <li><a href="">categorie 3</a></li>
-                  <li><a href="">categorie 4</a></li>
+                  <li v-for="(categorie, n) in categories" :key="n">
+                    <a href="">{{ categorie.libelle }}</a>
+                  </li>
                 </ul>
               </div>
               <div class="cat-widget mt-5">
@@ -243,9 +105,66 @@
 </template>
 
 <script lang="ts">
+import { IArticle, Icategorie } from "@/interfaces/articles.interface";
 import Vue from "vue";
 // import defaultLayout from "./../layouts/defaultLayout.vue";
 export default Vue.extend({
+  data() {
+    return {
+      parPage: 4,
+      currentPage: 1,
+    };
+  },
+  filters: {
+    truncate(text: string, length: number, suffix: string) {
+      if (text.length > length) {
+        return text.substring(0, length) + suffix;
+      } else {
+        return text;
+      }
+    },
+  },
+  methods: {
+    getDate(localDate: string) {
+      let myDate = new Date(localDate);
+      return myDate.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    },
+    clickCallback: function (pageNum: number) {
+      this.currentPage = Number(pageNum);
+    },
+  },
+  computed: {
+    getItems(): IArticle[] {
+      if (this.listArticles) {
+        let current = this.currentPage * this.parPage;
+        let start = current - this.parPage;
+        return this.listArticles.slice(start, current);
+      }
+      return new Object() as IArticle[];
+    },
+    categories(): Icategorie[] {
+      return this.$store.getters["websiteModule/categories"];
+    },
+    someArticles(): IArticle[] {
+      return this.$store.getters["websiteModule/articles"]
+        ? this.$store.getters["websiteModule/articles"].slice(4, 8)
+        : "";
+    },
+
+    getPageCount(): number {
+      if (this.listArticles) {
+        return Math.ceil(this.listArticles.length / this.parPage);
+      }
+      return 0;
+    },
+    listArticles(): IArticle[] {
+      return this.$store.getters["websiteModule/articles"];
+    },
+  },
   // components: {
   //   defaultLayout,
   // },

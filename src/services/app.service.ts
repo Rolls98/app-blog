@@ -23,6 +23,7 @@ export class AppService extends CommonService {
       } as IArticlesResponse;
     }
   }
+
   async getVideos(): Promise<IvideoResponse> {
     try {
       const { data }: { data: IvideoResponse } = await this.client.get(
@@ -56,7 +57,7 @@ export class AppService extends CommonService {
         data,
       }: {
         data: IArticlesResponse;
-      } = await this.client.get("/articles", { params: body });
+      } = await this.client.get("/comment_articles", { params: body });
 
       return data;
     } catch (e) {
@@ -72,8 +73,40 @@ export class AppService extends CommonService {
         data,
       }: {
         data: IvideoResponse;
-      } = await this.client.get("videos", { params: body });
+      } = await this.client.get("comment_videos", { params: body });
 
+      return data;
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 0,
+      } as IvideoResponse;
+    }
+  }
+  async getOneArticle(body: iSearch): Promise<IArticlesResponse> {
+    try {
+      const { data }: { data: IArticlesResponse } = await this.client.get(
+        "articles",
+        { params: body },
+      );
+      // localResult
+      //
+      return data;
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 0,
+      } as IArticlesResponse;
+    }
+  }
+  async getOneVideo(body: iSearch): Promise<IvideoResponse> {
+    try {
+      const { data }: { data: IvideoResponse } = await this.client.get(
+        "videos",
+        { params: body },
+      );
+      // localResult
+      //
       return data;
     } catch (e) {
       console.log(e);

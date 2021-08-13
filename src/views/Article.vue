@@ -10,39 +10,23 @@
                 <div class="col-12">
                   <div class="article-blog">
                     <h1 class="article-blog-title">
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                      {{ article.title }}
                     </h1>
                     <div class="meta">
-                      <span class="meta-span"> Autor-name</span>
-                      <span class="meta-span"> jan/22/2021</span>
+                      <span class="meta-span"> {{ article.author }}</span>
+                      <span class="meta-span">
+                        {{ getDate(article.createdAt) }}</span
+                      >
                       <span class="material-icons-outlined meta-span">
                         share</span
                       >
                     </div>
                     <div class="illustration">
-                      <img
-                        src="img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="imf-fluid"
-                      />
+                      <img :src="article.image" alt="" class="imf-fluid" />
                     </div>
                     <div class="description">
                       <p>
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Quae tenetur amet odio, illo nihil, dolores ullam
-                        ab perspiciatis accusantium molestias possimus
-                        consequatur corporis facere quos labore, dignissimos
-                        enim quas laboriosam delectus ex quibusdam voluptatibus.
-                        Ea, deleniti aut. Laborum magni itaque vel, magnam
-                        exercitationem iste ad, natus perspiciatis iure
-                        assumenda debitis adipisci atque voluptatem dignissimos
-                        enim aspernatur repellat? Voluptatum distinctio tenetur
-                        sunt quis, mollitia eveniet consequatur amet maiores
-                        optio enim nostrum laborum deserunt est molestiae quidem
-                        eos quisquam, dolores sapiente alias? Voluptatem,
-                        incidunt! At beatae excepturi aut velit illo? Qui, quo
-                        possimus! Consequatur ratione illo tenetur accusantium
-                        repudiandae vel facere tempora!
+                        {{ article.content }}
                       </p>
                     </div>
                     <hr class="hr" />
@@ -52,28 +36,22 @@
                 <div class="col-12">
                   <div class="commentaire">
                     <h3 class="ml-3 mb-5n cmt-title">Commentaires</h3>
-                    <div class="comment-text">
-                      <h4 class="cmt-name">name</h4>
+
+                    <div
+                      class="comment-text"
+                      v-for="(comment, i) in comments"
+                      :key="i"
+                    >
+                      <h4 class="cmt-name">{{ comment.author }}</h4>
                       <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Earum excepturi ipsum porro perspiciatis officiis
-                        perferendis?
+                        {{ comment.message }}
                       </p>
-                      <button class="rply-btn">repondre</button>
-                    </div>
-                    <div class="rply-text">
-                      <h4 class="cmt-name">name</h4>
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Earum excepturi ipsum porro perspiciatis officiis
-                        perferendis?
-                      </p>
-                      <button class="rply-btn">repondre</button>
+                      <hr class="my-5" />
                     </div>
 
                     <div class="form_c">
                       <h3 class="ml-3 mb-5n cmt-title">
-                        Laissez un Commentaires
+                        Laissez un Commentaire
                       </h3>
                       <div class="form-group">
                         <label for=""> Nom</label>
@@ -106,63 +84,21 @@
               </div>
               <div class="cat-widget mt-5">
                 <h3 class="sibar-t">Articles récents</h3>
-                <a href="">
+                <a href="" v-for="(article, i) in fourArticles" :key="i">
                   <div class="recents d-flex">
                     <div class="img-r">
-                      <img
-                        src="img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="img-fluid"
-                      />
+                      <img :src="article.image" alt="" class="img-fluid" />
                     </div>
-                    <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
-                  </div>
-                </a>
-
-                <a href="">
-                  <div class="recents d-flex">
-                    <div class="img-r">
-                      <img
-                        src="img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </div>
-                    <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
-                  </div>
-                </a>
-                <a href="">
-                  <div class="recents d-flex">
-                    <div class="img-r">
-                      <img
-                        src="img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </div>
-                    <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
-                  </div>
-                </a>
-                <a href="">
-                  <div class="recents d-flex">
-                    <div class="img-r">
-                      <img
-                        src="img/mug-3403963_1920.jpg"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </div>
-                    <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
+                    <p>{{ article.content | truncate(10, "...") }}</p>
                   </div>
                 </a>
               </div>
               <div class="cat-widget mt-5">
                 <h3 class="sibar-t">categorie</h3>
                 <ul>
-                  <li><a href="">categorie 1</a></li>
-                  <li><a href="">categorie 2</a></li>
-                  <li><a href="">categorie 3</a></li>
-                  <li><a href="">categorie 4</a></li>
+                  <li v-for="(categorie, n) in categories" :key="n">
+                    <a href="">{{ categorie.libelle }}</a>
+                  </li>
                 </ul>
               </div>
               <div class="cat-widget mt-5">
@@ -196,12 +132,78 @@
 </template>
 
 <script lang="ts">
+import {
+  IArticle,
+  Icategorie,
+  ICommentArticle,
+} from "@/interfaces/articles.interface";
+import { AppService } from "@/services/app.service";
 import Vue from "vue";
 // import defaultLayout from "./../layouts/defaultLayout.vue";
 export default Vue.extend({
-  //   components: {
-  //     defaultLayout,
-  //   },
+  data() {
+    return {
+      article: {} as IArticle,
+      comments: [] as ICommentArticle[],
+    };
+  },
+  filters: {
+    truncate(text: string, length: number, suffix: string) {
+      if (text.length > length) {
+        return text.substring(0, length) + suffix;
+      } else {
+        return text;
+      }
+    },
+  },
+  computed: {
+    fourArticles(): IArticle[] {
+      return this.$store.getters["websiteModule/articles"]
+        ? this.$store.getters["websiteModule/articles"].slice(0, 4)
+        : "";
+    },
+    categories(): Icategorie[] {
+      return this.$store.getters["websiteModule/categories"];
+    },
+  },
+  methods: {
+    async getArticle(): Promise<void> {
+      let myId = parseInt(this.$route.params.id);
+      const userService = new AppService();
+      const result = await userService.getOneArticle({ id: myId });
+
+      if (!result.status) {
+        // console.log(result);
+        this.article = result[0] as IArticle;
+      } else {
+        console.log("Erreur");
+      }
+    },
+    async getCommentsArticle(): Promise<void> {
+      let myId = parseInt(this.$route.params.id);
+      const userService = new AppService();
+      const result = await userService.getCommentsArticle({ id: myId });
+
+      if (!result.status) {
+        console.log(result, "commentaire ");
+        this.comments = result;
+      } else {
+        console.log("Erreur");
+      }
+    },
+    getDate(localDate: string) {
+      let myDate = new Date(localDate);
+      return myDate.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    },
+  },
+  beforeMount() {
+    this.getArticle();
+    this.getCommentsArticle();
+  },
 });
 </script>
 

@@ -6,7 +6,8 @@ export class CommonService {
   constructor() {
     this.client = axios.create({
       // timeout: 30000,
-      baseURL: `${window.location.origin}/api`,
+      // baseURL: `${window.location.origin}/api`,
+      baseURL: "https://localhost:8000/api",
     });
   }
 }

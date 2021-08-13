@@ -5,35 +5,15 @@
         <section class="m-section">
           <div class="container">
             <div class="row">
-              <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <div
+                class="col-lg-3 col-md-6 col-sm-6 col-12"
+                v-for="(categorie, n) in categories"
+                :key="n"
+              >
                 <div id="" class="categoy-card">
-                  <img src="@/assets/img/s.jpg" alt="" class="img-fluid" />
+                  <img :src="categorie.image" alt="" class="img-fluid" />
                   <div class="title">
-                    <h3>Développement personnels</h3>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div id="c-img2" class="categoy-card">
-                  <img src="@/assets/img/b.jpg" alt="" class="img-fluid" />
-                  <div class="title">
-                    <h3>Bien-être</h3>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div id="c-img3" class="categoy-card">
-                  <img src="@/assets/img/images.jpg" alt="" class="img-fluid" />
-                  <div class="title">
-                    <h3>Médecine traditionnelle</h3>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div id="c-img4" class="categoy-card">
-                  <img src="@/assets/img/c.jpg" alt="" class="img-fluid" />
-                  <div class="title">
-                    <h3>Societé</h3>
+                    <h3>{{ categorie.libelle }}</h3>
                   </div>
                 </div>
               </div>
@@ -43,30 +23,20 @@
         <section class="section-presentation">
           <div class="container">
             <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <h2 class="secton-title">Section Title</h2>
+              <div
+                class="col-lg-6 col-md-6 col-sm-12"
+                v-if="firstArticle != ''"
+              >
+                <h2 class="secton-title">
+                  {{ firstArticle.title }}
+                </h2>
                 <p class="section-p">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Qui
-                  veritatis dolore, omnis a consequatur sequi nulla perspiciatis
-                  dolor quasi maiores ducimus ullam rem unde. At nobis ex itaque
-                  hic! Exercitationem obcaecati quia explicabo nostrum placeat
-                  magni rerum est saepe, consequuntur eos odio eius labore neque
-                  quidem ab qui! Cupiditate nostrum saepe alias magnam assumenda
-                  rem, quasi porro eaque inventore voluptatibus tenetur, aperiam
-                  nesciunt quia iusto quis? Quo, repellendus ad illo, sit esse
-                  quia assumenda ipsa sapiente libero corrupti reprehenderit.
-                  Expedita libero, omnis error porro aut provident eum.
-                  Doloribus libero maxime ut molestiae quos fugit facilis facere
-                  non, voluptate in eos.
+                  {{ firstArticle.content }}
                 </p>
               </div>
               <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="p-img">
-                  <img
-                    src="@/assets/img/mug-3403963_1920.jpg"
-                    alt=""
-                    class="img-fluid"
-                  />
+                  <img :src="firstArticle.image" alt="" class="img-fluid" />
                 </div>
               </div>
             </div>
@@ -75,148 +45,28 @@
         <section class="section-article">
           <div class="container">
             <h2 class="secton-title text-center">Section Title</h2>
-            <div class="row mt-5">
-              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="row mt-5" v-if="eightArticles != ''">
+              <div
+                class="col-lg-3 col-md-4 col-sm-6 col-12"
+                v-for="(item, i) in eightArticles"
+                :key="i"
+              >
                 <div class="article">
                   <div class="illustration">
-                    <img
-                      src="@/assets/img/mug-3403963_1920.jpg"
-                      alt=""
-                      class="imf-fluid"
-                    />
+                    <img :src="item.image" alt="" class="imf-fluid" />
                   </div>
                   <div class="description">
-                    <h3>Article title</h3>
-                    <p>Lorem ipsum dolor sit amet...</p>
-                    <a href="detail-article.html">
-                      <button class="s-moreBtn">voir plus</button></a
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.content | truncate(15, "...") }}</p>
+                    <router-link
+                      tag="button"
+                      class="s-moreBtn"
+                      :to="{ name: 'Article', params: { id: item.id } }"
+                      >voir plus</router-link
                     >
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <div class="article">
-                  <div class="illustration">
-                    <img
-                      src="@/assets/img/mug-3403963_1920.jpg"
-                      alt=""
-                      class="imf-fluid"
-                    />
-                  </div>
-                  <div class="description">
-                    <h3>Article title</h3>
-                    <p>Lorem ipsum dolor sit amet...</p>
-                    <a href="detail-article.html">
+                    <!-- <a href="detail-article.html">
                       <button class="s-moreBtn">voir plus</button></a
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <div class="article">
-                  <div class="illustration">
-                    <img
-                      src="@/assets/img/mug-3403963_1920.jpg"
-                      alt=""
-                      class="imf-fluid"
-                    />
-                  </div>
-                  <div class="description">
-                    <h3>Article title</h3>
-                    <p>Lorem ipsum dolor sit amet...</p>
-                    <a href="detail-article.html">
-                      <button class="s-moreBtn">voir plus</button></a
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <div class="article">
-                  <div class="illustration">
-                    <img
-                      src="@/assets/img/mug-3403963_1920.jpg"
-                      alt=""
-                      class="imf-fluid"
-                    />
-                  </div>
-                  <div class="description">
-                    <h3>Article title</h3>
-                    <p>Lorem ipsum dolor sit amet...</p>
-                    <a href="detail-article.html">
-                      <button class="s-moreBtn">voir plus</button></a
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <div class="article">
-                  <div class="illustration">
-                    <img
-                      src="@/assets/img/mug-3403963_1920.jpg"
-                      alt=""
-                      class="imf-fluid"
-                    />
-                  </div>
-                  <div class="description">
-                    <h3>Article title</h3>
-                    <p>Lorem ipsum dolor sit amet...</p>
-                    <a href="detail-article.html">
-                      <button class="s-moreBtn">voir plus</button></a
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <div class="article">
-                  <div class="illustration">
-                    <img
-                      src="@/assets/img/mug-3403963_1920.jpg"
-                      alt=""
-                      class="imf-fluid"
-                    />
-                  </div>
-                  <div class="description">
-                    <h3>Article title</h3>
-                    <p>Lorem ipsum dolor sit amet...</p>
-                    <a href="detail-article.html">
-                      <button class="s-moreBtn">voir plus</button></a
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <div class="article">
-                  <div class="illustration">
-                    <img
-                      src="@/assets/img/mug-3403963_1920.jpg"
-                      alt=""
-                      class="imf-fluid"
-                    />
-                  </div>
-                  <div class="description">
-                    <h3>Article title</h3>
-                    <p>Lorem ipsum dolor sit amet...</p>
-                    <a href="detail-article.html">
-                      <button class="s-moreBtn">voir plus</button></a
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <div class="article">
-                  <div class="illustration">
-                    <img
-                      src="@/assets/img/mug-3403963_1920.jpg"
-                      alt=""
-                      class="imf-fluid"
-                    />
-                  </div>
-                  <div class="description">
-                    <h3>Article title</h3>
-                    <p>Lorem ipsum dolor sit amet...</p>
-                    <a href="detail-article.html">
-                      <button class="s-moreBtn">voir plus</button></a
-                    >
+                    > -->
                   </div>
                 </div>
               </div>
@@ -226,90 +76,46 @@
         <section class="liste-video">
           <div class="container">
             <h2 class="secton-title text-center">Section Title</h2>
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="article article-video">
-                  <video controls>
-                    <source
+            <div class="row" v-if="threeVideos != ''">
+              <div class="col-lg-4" v-for="(video, i) in threeVideos" :key="i">
+                <router-link
+                  tag="div"
+                  :to="{ name: 'Video', params: { id: video.id } }"
+                >
+                  <div class="article article-video">
+                    <yanVideo :sources="getSource(video.url)"></yanVideo>
+                    <!-- <video controls> -->
+                    <!-- <source
                       src="”http://techslides.com/demos/sample-videos/small.ogv”"
                       type="video/ogg"
-                    />
-                    <source
-                      src="/build/videos/arcnet.io(7-sec).mp4"
-                      type="video/mp4"
-                    />
-                  </video>
-                  <div class="description">
-                    <div class="meta">
-                      <span class="meta-span"> jan/22/2021</span>
-                      <span class="meta-category">Bien-être</span>
-                    </div>
-                    <h3>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Eligendi, iste.
-                    </h3>
+                    /> -->
+                    <!-- <source v-if="video" :src="video.url" type="video/mp4" />
+                  </video> -->
+                    <div class="description">
+                      <div class="meta">
+                        <span class="meta-span">{{
+                          getDate(video.createdAt)
+                        }}</span>
+                        <!-- <router-link
+                        tag="span"
+                        class="meta-category"
+                        :to="{ name: 'Video', params: { id: video.id } }"
+                        >{{ video.categorie.libelle }}</router-link
+                      > -->
+                        <span class="meta-category">{{
+                          video.categorie.libelle
+                        }}</span>
+                      </div>
+                      <h3>
+                        {{ video.content | truncate(15, "...") }}
+                      </h3>
 
-                    <div class="player-icon">
+                      <!-- <div class="player-icon">
                       <span class="material-icons-outlined"> play_circle </span>
+                    </div> -->
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="article article-video">
-                  <video controls>
-                    <source
-                      src="”http://techslides.com/demos/sample-videos/small.ogv”"
-                      type="video/ogg"
-                    />
-                    <source
-                      src="/build/videos/arcnet.io(7-sec).mp4"
-                      type="video/mp4"
-                    />
-                  </video>
-                  <div class="description">
-                    <div class="meta">
-                      <span class="meta-span"> jan/22/2021</span>
-                      <span class="meta-category">Bien-être</span>
-                    </div>
-                    <h3>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Eligendi, iste.
-                    </h3>
-
-                    <div class="player-icon">
-                      <span class="material-icons-outlined"> play_circle </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="article article-video">
-                  <video controls>
-                    <source
-                      src="”http://techslides.com/demos/sample-videos/small.ogv”"
-                      type="video/ogg"
-                    />
-                    <source
-                      src="/build/videos/arcnet.io(7-sec).mp4"
-                      type="video/mp4"
-                    />
-                  </video>
-                  <div class="description">
-                    <div class="meta">
-                      <span class="meta-span"> jan/22/2021</span>
-                      <span class="meta-category">Bien-être</span>
-                    </div>
-                    <h3>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Eligendi, iste.
-                    </h3>
-
-                    <div class="player-icon">
-                      <span class="material-icons-outlined"> play_circle </span>
-                    </div>
-                  </div>
-                </div>
+                </router-link>
               </div>
             </div>
           </div>
@@ -351,7 +157,76 @@
 </template>
 
 <script lang="ts">
+import { IArticle, Icategorie } from "@/interfaces/articles.interface";
+import { Ivideo } from "@/interfaces/video.interface";
+import yanVideo from "@/components/video.vue";
 import Vue from "vue";
 // import Default from "../layouts/Default.vue";
-export default Vue.extend({});
+export default Vue.extend({
+  components: {
+    yanVideo,
+  },
+  filters: {
+    truncate(text: string, length: number, suffix: string) {
+      if (text.length > length) {
+        return text.substring(0, length) + suffix;
+      } else {
+        return text;
+      }
+    },
+  },
+  methods: {
+    getDate(localDate: string) {
+      let myDate = new Date(localDate);
+      return myDate.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    },
+    getSource(url: string): any {
+      return [
+        {
+          type: "video/mp4",
+          // src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
+          src: url,
+        },
+      ];
+    },
+  },
+  computed: {
+    listArticles(): IArticle[] {
+      return this.$store.getters["websiteModule/articles"];
+    },
+    firstArticle(): IArticle {
+      return this.$store.getters["websiteModule/articles"]
+        ? this.$store.getters["websiteModule/articles"][0]
+        : "";
+    },
+    eightArticles(): IArticle[] {
+      return this.$store.getters["websiteModule/articles"]
+        ? this.$store.getters["websiteModule/articles"].slice(0, 8)
+        : "";
+    },
+    threeVideos(): Ivideo[] {
+      return this.$store.getters["websiteModule/videos"]
+        ? this.$store.getters["websiteModule/articles"].slice(0, 3)
+        : "";
+    },
+    categories(): Icategorie[] {
+      return this.$store.getters["websiteModule/categories"];
+    },
+  },
+  // async beforeMount(): Promise<void> {
+  //   await Promise.all([
+  //     this.$store.dispatch("websiteModule/fetchArticles"),
+  //     this.$store.dispatch("websiteModule/fetchVideos"),
+  //     this.$store.dispatch("websiteModule/fetchCategories"),
+
+  //     // this.$store.dispatch("websiteModule/fetchArticles"),
+  //     // this.$store.dispatch("websiteModule/fetchVideos"),
+  //   ]);
+  //   console.log(this.$store.getters["websiteModule/articles"]);
+  // },
+});
 </script>
