@@ -5,9 +5,12 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8">
-            <div class="row">
+            <div class="row" v-if="!isSearch">
               <div class="col-lg-6" v-for="(video, i) in getItems" :key="i">
-                <div class="article article-video">
+                <div
+                  class="article article-video"
+                  @click="localRoute(video.id)"
+                >
                   <yanVideo :sources="getSource(video.url)"></yanVideo>
                   <div class="description">
                     <div class="meta">
@@ -50,14 +53,19 @@
               <!-- pub box -->
               <div class="card mt-5" style="padding: 1.5rem" />
             </div>
+            <searchResult v-else></searchResult>
           </div>
           <div class="col-lg-4 mb-5">
             <div class="sidebar">
               <div class="cat-widget mb-5">
                 <h3 class="sibar-t">recherche</h3>
-                <form action="" class="d-flex">
-                  <input type="text" class="form-control" />
-                  <button type="submit" class="btn-form">
+                <form @submit="localSearch" class="d-flex">
+                  <input type="text" v-model="search" class="form-control" />
+                  <button
+                    @submit="localSearch"
+                    :disabled="search.length == 0"
+                    class="btn-form"
+                  >
                     <span class="material-icons-outlined"> search </span>
                   </button>
                 </form>
@@ -127,10 +135,13 @@
 import { Ivideo } from "@/interfaces/video.interface";
 import yanVideo from "@/components/video.vue";
 import Vue from "vue";
+import searchResult from "@/components/searchResult.vue";
 import { Icategorie } from "@/interfaces/articles.interface";
+import { AppService } from "@/services/app.service";
 export default Vue.extend({
   components: {
     yanVideo,
+    searchResult,
   },
   filters: {
     truncate(text: string, length: number, suffix: string) {
@@ -143,13 +154,21 @@ export default Vue.extend({
   },
   data() {
     return {
-      parPage: 1,
+      parPage: 4,
       currentPage: 1,
+      isSearch: false,
+      search: "" as string,
     };
   },
   methods: {
     clickCallback: function (pageNum: number) {
       this.currentPage = Number(pageNum);
+    },
+    localRoute(myId: number) {
+      return this.$router.push({
+        name: "Video",
+        params: { id: myId },
+      });
     },
     getDate(localDate: string) {
       let myDate = new Date(localDate);
@@ -158,6 +177,26 @@ export default Vue.extend({
         month: "long",
         year: "numeric",
       });
+    },
+    async localSearch(e) {
+      e.preventDefault();
+      if (this.search.length >= 1) {
+        await this.searchVideos();
+        this.isSearch = true;
+      }
+    },
+    async searchVideos(): Promise<void> {
+      const userService = new AppService();
+      const result = await userService.searchVideos({ title: this.search });
+
+      if (!result.status) {
+        console.log(result, "search findind ");
+        // this.resultArticles = result;
+        this.$store.commit("websiteModule/updateSearchResults", result);
+        // this.comments = result;
+      } else {
+        console.log("Erreur");
+      }
     },
     getSource(url: string): any {
       return [
@@ -194,13 +233,17 @@ export default Vue.extend({
   // beforeMount() {
   //   this.videos = this.$store.getters["websiteModule/videos"];
   // },
+  watch: {
+    search(n, o) {
+      if (this.search.length == 0 && this.isSearch == true) {
+        this.isSearch = false;
+      }
+    },
+  },
 });
 </script>
 
 <style>
-.m-pagination a {
-  vertical-align: middle !important;
-}
 .m-pagination ul li:hover {
   background-color: #1b6068;
   color: white;
@@ -211,5 +254,11 @@ export default Vue.extend({
 .m-pagination ul li .active {
   background-color: #1b6068;
   color: white;
+}
+.m-pagination ul li a {
+  color: black;
+  text-decoration: none;
+  display: block;
+  height: 100%;
 }
 </style>

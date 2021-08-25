@@ -6,6 +6,7 @@ export interface WebsiteState {
   articles: IArticle[];
   categories: Icategorie[];
   videos: Ivideo[];
+  searchResults: IArticle[] | Ivideo[];
   commentsVideo: ICommentVideo[];
   commentsArticle: ICommentArticle[];
 }

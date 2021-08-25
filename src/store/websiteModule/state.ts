@@ -7,11 +7,12 @@ import {
 import { WebsiteState } from "../../interfaces/store/website.interface";
 
 const state: () => WebsiteState = () => ({
-  articles: (null as unknown) as IArticle[],
-  categories: (null as unknown) as Icategorie[],
-  videos: (null as unknown) as Ivideo[],
-  commentsVideo: (null as unknown) as ICommentVideo[],
-  commentsArticle: (null as unknown) as ICommentArticle[],
+  articles: [] as IArticle[],
+  searchResults: [] as IArticle[] | Ivideo[],
+  categories: [] as Icategorie[],
+  videos: [] as Ivideo[],
+  commentsVideo: [] as ICommentVideo[],
+  commentsArticle: [] as ICommentArticle[],
 });
 
 export default state;

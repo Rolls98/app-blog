@@ -3,6 +3,12 @@
   padding: 0;
   box-sizing: inherit;
 }
+p {
+  font-size: 1.6rem;
+}
+..form-control {
+  font-size: 1.6rem;
+}
 
 html {
   font-size: 62.5%;
@@ -348,6 +354,7 @@ ul li {
   background-color: #1c2257;
   color: #fff;
   padding: 0.5rem 1rem;
+  font-size: 1.6rem;
 }
 
 /* liste-video */
@@ -436,6 +443,16 @@ ul li {
 .m-pagination ul {
   padding-left: 0;
 }
+.m-pagination .className .active {
+  background-color: #1b6068;
+  color: #fff;
+}
+.m-pagination .className .active a {
+  color: #fff;
+}
+/* .m-pagination ul a {
+  color: #fff;
+} */
 
 .m-pagination ul li {
   width: 3rem;

@@ -133,19 +133,43 @@
               </p>
             </div>
             <div class="col-lg-6">
-              <form action="">
+              <form @submit="checkForm">
                 <div class="form-group">
                   <label for="">Nom</label>
-                  <input id="" type="text" name="" class="form-control" />
+                  <input
+                    id=""
+                    type="text"
+                    name=""
+                    v-model="nom"
+                    required
+                    class="form-control"
+                  />
                 </div>
                 <div class="form-group">
                   <label for="">E-mail</label>
-                  <input id="" type="email" name="" class="form-control" />
+                  <input
+                    id=""
+                    type="email"
+                    name=""
+                    v-model="email"
+                    required
+                    class="form-control"
+                  />
                 </div>
 
                 <div class="form-group">
                   <label for="">Message</label>
-                  <textarea id="" name="" />
+                  <textarea id="" name="" v-model="message" required />
+                </div>
+                <div class="form-group">
+                  <button
+                    class="Btn-form"
+                    type="submit"
+                    @submit="checkForm"
+                    :disabled="isDisabled"
+                  >
+                    {{ action }}
+                  </button>
                 </div>
               </form>
             </div>
@@ -161,10 +185,20 @@ import { IArticle, Icategorie } from "@/interfaces/articles.interface";
 import { Ivideo } from "@/interfaces/video.interface";
 import yanVideo from "@/components/video.vue";
 import Vue from "vue";
+import { AppService } from "@/services/app.service";
 // import Default from "../layouts/Default.vue";
 export default Vue.extend({
   components: {
     yanVideo,
+  },
+  data() {
+    return {
+      action: "Envoyer",
+      isDisabled: false,
+      nom: null as unknown as string,
+      message: null as unknown as string,
+      email: null as unknown as string,
+    };
   },
   filters: {
     truncate(text: string, length: number, suffix: string) {
@@ -192,6 +226,63 @@ export default Vue.extend({
           src: url,
         },
       ];
+    },
+    async checkForm(e: any) {
+      e.preventDefault();
+      this.isDisabled = true;
+      this.action = "Veillez patienter ...";
+      if (this.email && this.message && this.nom) {
+        console.log("bien");
+        await this.postContact();
+        this.isDisabled = false;
+        this.action = "Envoyer";
+      } else {
+        console.log("incorrect");
+        this.isDisabled = false;
+        this.action = "Envoyer";
+        this.$swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Veuillez remplir correctement tous les champs",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    },
+    async postContact(): Promise<void> {
+      let data = {
+        nom: this.nom,
+        email: this.email,
+        message: this.message,
+      };
+      console.log(data);
+
+      const userService = new AppService();
+      const result = await userService.postContact(data);
+      console.log(result);
+      if (!result.status) {
+        this.message = "";
+        this.nom = "";
+        this.email = "";
+        // this.$swal("Votre comentaire a bien été enregistré");
+        this.$swal.fire({
+          position: "center",
+          icon: "success",
+          title:
+            "Votre message  a bien été envoyé , nous vous repondrons sous peu",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else {
+        console.log("Erreur");
+        this.$swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Veuillez remplir correctement tous les champs",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     },
   },
   computed: {

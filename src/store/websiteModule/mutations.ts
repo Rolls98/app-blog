@@ -12,6 +12,12 @@ export default {
   updateVideos(state: WebsiteState, videos: Ivideo[]): void {
     state.videos = videos;
   },
+  updateSearchResults(
+    state: WebsiteState,
+    results: Ivideo[] | IArticle[],
+  ): void {
+    state.searchResults = results;
+  },
   updateCommentsArticle(
     state: WebsiteState,
     commentsArticle: ICommentArticle[],

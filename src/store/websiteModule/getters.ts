@@ -9,6 +9,9 @@ export default {
   articles(state: WebsiteState): IArticle[] {
     return state.articles;
   },
+  searchResults(state: WebsiteState): IArticle[] | Ivideo[] {
+    return state.searchResults;
+  },
   videos(state: WebsiteState): Ivideo[] {
     return state.videos;
   },

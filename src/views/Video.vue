@@ -5,7 +5,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8">
-            <div class="row">
+            <div class="row" v-if="!isSearch">
               <div class="row mt-5">
                 <div class="col-12">
                   <div class="article-blog">
@@ -22,17 +22,11 @@
                       >
                     </div>
                     <div class="illustration">
-                      <yanVideo :sources="getSource(video.url)"></yanVideo>
-                      <!-- <video controls>
-                        <source
-                          src="”http://techslides.com/demos/sample-videos/small.ogv”"
-                          type="video/ogg"
-                        />
-                        <source
-                          src="/build/videos/arcnet.io(7-sec).mp4"
-                          type="video/mp4"
-                        />
-                      </video> -->
+                      <!-- <yanVideo :sources="getSource(video.url)"></yanVideo> -->
+                      <yanVideo
+                        :sources="getSource(video.url)"
+                        v-if="video.url.length > 0"
+                      ></yanVideo>
                     </div>
                     <div class="description">
                       <p>
@@ -45,54 +39,68 @@
                 <div class="col-12">
                   <div class="commentaire">
                     <h3 class="ml-3 mb-5n cmt-title">Commentaires</h3>
-                    <div class="comment-text">
-                      <h4 class="cmt-name">name</h4>
+
+                    <div
+                      class="comment-text"
+                      v-for="(comment, i) in comments"
+                      :key="i"
+                    >
+                      <h4 class="cmt-name">{{ comment.author }}</h4>
                       <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Earum excepturi ipsum porro perspiciatis officiis
-                        perferendis?
+                        {{ comment.message }}
                       </p>
-                      <button class="rply-btn">repondre</button>
-                    </div>
-                    <div class="rply-text">
-                      <h4 class="cmt-name">name</h4>
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Earum excepturi ipsum porro perspiciatis officiis
-                        perferendis?
-                      </p>
-                      <button class="rply-btn">repondre</button>
+                      <hr class="my-5" />
                     </div>
 
                     <div class="form_c">
                       <h3 class="ml-3 mb-5n cmt-title">
                         Laissez un Commentaires
                       </h3>
-                      <div class="form-group">
-                        <label for=""> Nom</label>
-                        <input type="text" class="form-control" />
-                      </div>
+                      <form id="app" @submit="checkForm">
+                        <div class="form-group">
+                          <label for=""> Nom</label>
+                          <input
+                            type="text"
+                            v-model="author"
+                            class="form-control"
+                          />
+                        </div>
 
-                      <div class="form-group">
-                        <label for=""> Message</label>
-                        <textarea id="" name="" class="form-control" />
-                      </div>
-                      <div class="form-group">
-                        <button class="Btn-form">Envoyer</button>
-                      </div>
+                        <div class="form-group">
+                          <label for=""> Message</label>
+                          <textarea
+                            v-model="message"
+                            class="form-control"
+                          ></textarea>
+                        </div>
+                        <div class="form-group">
+                          <button
+                            class="Btn-form"
+                            type="submit"
+                            @submit="checkForm"
+                          >
+                            Envoyer
+                          </button>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <searchResult v-else></searchResult>
           </div>
           <div class="col-lg-4">
             <div class="sidebar mt-5">
               <div class="cat-widget mb-5">
                 <h3 class="sibar-t">recherche</h3>
-                <form action="" class="d-flex">
-                  <input type="text" class="form-control" />
-                  <button type="submit" class="btn-form">
+                <form @submit="localSearch" class="d-flex">
+                  <input type="text" v-model="search" class="form-control" />
+                  <button
+                    @submit="localSearch"
+                    :disabled="search.length == 0"
+                    class="btn-form"
+                  >
                     <span class="material-icons-outlined"> search </span>
                   </button>
                 </form>
@@ -102,7 +110,7 @@
                 <a href="">
                   <div class="recents d-flex">
                     <div class="img-r">
-                      <video controls>
+                      <!-- <video controls>
                         <source
                           src="”http://techslides.com/demos/sample-videos/small.ogv”"
                           type="video/ogg"
@@ -111,7 +119,8 @@
                           src="/build/videos/arcnet.io(7-sec).mp4"
                           type="video/mp4"
                         />
-                      </video>
+                      </video> -->
+                      <yanVideo :sources="getSource(video.url)"></yanVideo>
                     </div>
                     <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
                   </div>
@@ -160,8 +169,10 @@ import {
   IArticle,
   Icategorie,
   ICommentArticle,
+  ICommentResponse,
 } from "@/interfaces/articles.interface";
 import yanVideo from "@/components/video.vue";
+import searchResult from "@/components/searchResult.vue";
 import { ICommentVideo, Ivideo } from "@/interfaces/video.interface";
 import { AppService } from "@/services/app.service";
 import Vue from "vue";
@@ -169,11 +180,17 @@ import Vue from "vue";
 export default Vue.extend({
   components: {
     yanVideo,
+    searchResult,
   },
   data() {
     return {
       video: {} as Ivideo,
-      comments: [] as ICommentVideo[],
+      // comments: [] as ICommentVideo[],
+      comments: [] as ICommentResponse[],
+      author: null as unknown as string,
+      message: null as unknown as string,
+      isSearch: false,
+      search: "" as string,
     };
   },
   filters: {
@@ -194,16 +211,84 @@ export default Vue.extend({
     categories(): Icategorie[] {
       return this.$store.getters["websiteModule/categories"];
     },
+    id() {
+      return this.$route.params.id;
+    },
   },
   methods: {
+    async localSearch(e) {
+      e.preventDefault();
+      if (this.search.length >= 1) {
+        await this.searchVideos();
+        this.isSearch = true;
+      }
+    },
+    async searchVideos(): Promise<void> {
+      const userService = new AppService();
+      const result = await userService.searchVideos({ title: this.search });
+
+      if (!result.status) {
+        console.log(result, "search findind ");
+        // this.resultArticles = result;
+        this.$store.commit("websiteModule/updateSearchResults", result);
+        // this.comments = result;
+      } else {
+        console.log("Erreur");
+      }
+    },
     getSource(url: string): any {
       return [
         {
           type: "video/mp4",
-          // src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
           src: url,
         },
       ];
+    },
+    async postCommentVideo(): Promise<void> {
+      let myId = this.$route.params.id;
+      let data = {
+        message: this.message,
+        video: "/api/videos/" + myId,
+        author: this.author,
+      };
+      console.log(data);
+
+      const userService = new AppService();
+      const result = await userService.postCommentArticle(data);
+      console.log(result);
+      if (!result.status) {
+        this.comments = [result, ...this.comments];
+
+        console.log(result, "post effectué ");
+        this.message = "";
+        this.author = "";
+        // this.$swal("Votre comentaire a bien été enregistré");
+        this.$swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Votre comentaire a bien été enregistré",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else {
+        console.log("Erreur");
+      }
+    },
+    async checkForm(e: any) {
+      e.preventDefault();
+      if (this.author && this.message) {
+        console.log("bien");
+        await this.postCommentVideo();
+      } else {
+        console.log("incorrect");
+        this.$swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Veuillez remplir correctement tous les champs",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     },
     async getVideo(): Promise<void> {
       let myId = parseInt(this.$route.params.id);
@@ -212,12 +297,12 @@ export default Vue.extend({
 
       if (!result.status) {
         // console.log(result);
-        this.video = result[0] as Ivideo;
+        this.video = result as Ivideo;
       } else {
         console.log("Erreur");
       }
     },
-    async getCommentsArticle(): Promise<void> {
+    async getCommentsVideo(): Promise<void> {
       let myId = parseInt(this.$route.params.id);
       const userService = new AppService();
       const result = await userService.getCommentsVideo({ id: myId });
@@ -240,7 +325,22 @@ export default Vue.extend({
   },
   beforeMount() {
     this.getVideo();
-    this.getCommentsArticle();
+    this.getCommentsVideo();
+  },
+  watch: {
+    search(n, o) {
+      if (this.search.length == 0 && this.isSearch == true) {
+        this.isSearch = false;
+      }
+    },
+    // id(n, o) {
+    //   if (n) {
+    //     console.log("nfifj");
+
+    //     this.getVideo();
+    //     this.getCommentsVideo();
+    //   }
+    // },
   },
 });
 </script>
