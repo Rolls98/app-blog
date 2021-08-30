@@ -11,7 +11,8 @@
                   class="article article-video"
                   @click="localRoute(video.id)"
                 >
-                  <yanVideo :sources="getSource(video.url)"></yanVideo>
+                  <!-- <yanVideo :sources="getSource(video.url)"></yanVideo> -->
+                  <yanVideo></yanVideo>
                   <div class="description">
                     <div class="meta">
                       <span class="meta-span">
@@ -133,7 +134,7 @@
 
 <script lang="ts">
 import { Ivideo } from "@/interfaces/video.interface";
-import yanVideo from "@/components/video.vue";
+import yanVideo from "@/components/lecteurVideo.vue";
 import Vue from "vue";
 import searchResult from "@/components/searchResult.vue";
 import { Icategorie } from "@/interfaces/articles.interface";

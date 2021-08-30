@@ -23,10 +23,7 @@
                     </div>
                     <div class="illustration">
                       <!-- <yanVideo :sources="getSource(video.url)"></yanVideo> -->
-                      <yanVideo
-                        :sources="getSource(video.url)"
-                        v-if="video.url.length > 0"
-                      ></yanVideo>
+                      <yanVideo :sources="getSource(video.url)"></yanVideo>
                     </div>
                     <div class="description">
                       <p>
@@ -110,17 +107,8 @@
                 <a href="">
                   <div class="recents d-flex">
                     <div class="img-r">
-                      <!-- <video controls>
-                        <source
-                          src="”http://techslides.com/demos/sample-videos/small.ogv”"
-                          type="video/ogg"
-                        />
-                        <source
-                          src="/build/videos/arcnet.io(7-sec).mp4"
-                          type="video/mp4"
-                        />
-                      </video> -->
-                      <yanVideo :sources="getSource(video.url)"></yanVideo>
+                      <!-- <yanVideo :sources="getSource(video.url)"></yanVideo> -->
+                      <yanVideo></yanVideo>
                     </div>
                     <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
                   </div>
@@ -171,7 +159,7 @@ import {
   ICommentArticle,
   ICommentResponse,
 } from "@/interfaces/articles.interface";
-import yanVideo from "@/components/video.vue";
+import yanVideo from "@/components/lecteurVideo.vue";
 import searchResult from "@/components/searchResult.vue";
 import { ICommentVideo, Ivideo } from "@/interfaces/video.interface";
 import { AppService } from "@/services/app.service";

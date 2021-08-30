@@ -83,14 +83,9 @@
                   :to="{ name: 'Video', params: { id: video.id } }"
                 >
                   <div class="article article-video">
-                    <yanVideo :sources="getSource(video.url)"></yanVideo>
-                    <!-- <video controls> -->
-                    <!-- <source
-                      src="”http://techslides.com/demos/sample-videos/small.ogv”"
-                      type="video/ogg"
-                    /> -->
-                    <!-- <source v-if="video" :src="video.url" type="video/mp4" />
-                  </video> -->
+                    <!-- <yanVideo :sources="getSource(video.url)"></yanVideo> -->
+                    <yanVideo></yanVideo>
+
                     <div class="description">
                       <div class="meta">
                         <span class="meta-span">{{
@@ -183,7 +178,7 @@
 <script lang="ts">
 import { IArticle, Icategorie } from "@/interfaces/articles.interface";
 import { Ivideo } from "@/interfaces/video.interface";
-import yanVideo from "@/components/video.vue";
+import yanVideo from "@/components/lecteurVideo.vue";
 import Vue from "vue";
 import { AppService } from "@/services/app.service";
 // import Default from "../layouts/Default.vue";
@@ -301,7 +296,7 @@ export default Vue.extend({
     },
     threeVideos(): Ivideo[] {
       return this.$store.getters["websiteModule/videos"]
-        ? this.$store.getters["websiteModule/articles"].slice(0, 3)
+        ? this.$store.getters["websiteModule/videos"].slice(0, 3)
         : "";
     },
     categories(): Icategorie[] {

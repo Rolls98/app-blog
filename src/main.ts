@@ -3,9 +3,10 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import Default from "@/layouts/Default.vue";
-import VueVideoPlayer from "vue-video-player";
 import Paginate from "vuejs-paginate";
-import "video.js/dist/video-js.css";
+
+import VuePlyr from "vue-plyr";
+import "vue-plyr/dist/vue-plyr.css";
 
 import VueSweetalert2 from "vue-sweetalert2";
 
@@ -14,17 +15,13 @@ import "sweetalert2/dist/sweetalert2.min.css";
 
 Vue.use(VueSweetalert2);
 
-// require videojs style
+Vue.use(VuePlyr, {
+  plyr: {},
+});
 
 Vue.component("paginate", Paginate);
 Vue.component("Default", Default);
 
-Vue.use(
-  VueVideoPlayer /* {
-  options: global default options,
-  events: global videojs events
-} */,
-);
 Vue.config.productionTip = false;
 
 new Vue({
