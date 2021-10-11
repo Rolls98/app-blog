@@ -11,8 +11,8 @@
                   class="article article-video"
                   @click="localRoute(video.id)"
                 >
-                  <!-- <yanVideo :sources="getSource(video.url)"></yanVideo> -->
-                  <yanVideo></yanVideo>
+                  <yanVideo :sources="getSource(video.url)"></yanVideo>
+                  <!-- <yanVideo></yanVideo> -->
                   <div class="description">
                     <div class="meta">
                       <span class="meta-span">
@@ -168,7 +168,7 @@ export default Vue.extend({
     localRoute(myId: number) {
       return this.$router.push({
         name: "Video",
-        params: { id: myId },
+        params: { id: myId.toString() },
       });
     },
     getDate(localDate: string) {

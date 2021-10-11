@@ -46,6 +46,11 @@
                       <p>
                         {{ comment.message }}
                       </p>
+                      <div class="d-flex justify-content-end">
+                        <p>
+                          {{ getDateComment(comment.createdAt) }}
+                        </p>
+                      </div>
                       <hr class="my-5" />
                     </div>
 
@@ -216,7 +221,7 @@ export default Vue.extend({
     localRoute(myId: number) {
       return this.$router.push({
         name: "Article",
-        params: { id: myId },
+        params: { id: myId.toString() },
       });
     },
     async localSearch(e) {
@@ -245,7 +250,7 @@ export default Vue.extend({
       console.log(myId);
 
       const userService = new AppService();
-      const result = await userService.getOneArticle({ id: myId });
+      const result = await userService.getOneArticle({ id: myId.toString() });
 
       if (!result.status) {
         // console.log(result);
@@ -260,7 +265,9 @@ export default Vue.extend({
       console.log(myId);
 
       const userService = new AppService();
-      const result = await userService.getCommentsArticle({ id: myId });
+      const result = await userService.getCommentsArticle({
+        id: myId.toString(),
+      });
 
       if (!result.status) {
         // console.log(result, "commentaire ");
@@ -307,6 +314,16 @@ export default Vue.extend({
         year: "numeric",
       });
     },
+    getDateComment(localDate: string) {
+      let myDate = new Date(localDate);
+      return myDate.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      });
+    },
     async checkForm(e: any) {
       e.preventDefault();
       this.isDisabled = true;
@@ -331,9 +348,9 @@ export default Vue.extend({
     },
   },
 
-  beforeMount() {
-    this.getArticle();
-    this.getCommentsArticle();
+  async beforeMount() {
+    await this.getArticle();
+    await this.getCommentsArticle();
   },
   watch: {
     search(n, o) {

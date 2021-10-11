@@ -23,7 +23,7 @@
                     </div>
                     <div class="illustration">
                       <!-- <yanVideo :sources="getSource(video.url)"></yanVideo> -->
-                      <yanVideo :sources="getSource(video.url)"></yanVideo>
+                      <yanVideo :source="getSource(video.url)"></yanVideo>
                     </div>
                     <div class="description">
                       <p>
@@ -46,6 +46,11 @@
                       <p>
                         {{ comment.message }}
                       </p>
+                      <div class="d-flex justify-content-end">
+                        <p>
+                          {{ getDateComment(comment.createdAt) }}
+                        </p>
+                      </div>
                       <hr class="my-5" />
                     </div>
 
@@ -107,8 +112,8 @@
                 <a href="">
                   <div class="recents d-flex">
                     <div class="img-r">
-                      <!-- <yanVideo :sources="getSource(video.url)"></yanVideo> -->
-                      <yanVideo></yanVideo>
+                      <yanVideo :sources="getSource(video.url)"></yanVideo>
+                      <!-- <yanVideo></yanVideo> -->
                     </div>
                     <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
                   </div>
@@ -211,6 +216,16 @@ export default Vue.extend({
         this.isSearch = true;
       }
     },
+    getDateComment(localDate: string) {
+      let myDate = new Date(localDate);
+      return myDate.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      });
+    },
     async searchVideos(): Promise<void> {
       const userService = new AppService();
       const result = await userService.searchVideos({ title: this.search });
@@ -281,7 +296,7 @@ export default Vue.extend({
     async getVideo(): Promise<void> {
       let myId = parseInt(this.$route.params.id);
       const userService = new AppService();
-      const result = await userService.getOneVideo({ id: myId });
+      const result = await userService.getOneVideo({ id: myId.toString() });
 
       if (!result.status) {
         // console.log(result);
@@ -293,7 +308,9 @@ export default Vue.extend({
     async getCommentsVideo(): Promise<void> {
       let myId = parseInt(this.$route.params.id);
       const userService = new AppService();
-      const result = await userService.getCommentsVideo({ id: myId });
+      const result = await userService.getCommentsVideo({
+        id: myId.toString(),
+      });
 
       if (!result.status) {
         console.log(result, "commentaire ");
@@ -311,9 +328,9 @@ export default Vue.extend({
       });
     },
   },
-  beforeMount() {
-    this.getVideo();
-    this.getCommentsVideo();
+  async beforeMount() {
+    await this.getVideo();
+    await this.getCommentsVideo();
   },
   watch: {
     search(n, o) {

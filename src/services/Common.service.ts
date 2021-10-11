@@ -7,7 +7,7 @@ export class CommonService {
     this.client = axios.create({
       // timeout: 30000,
       // baseURL: `${window.location.origin}/api`,
-      baseURL: "https://localhost:8000/api",
+      baseURL: process.env.VUE_APP_ONLINE_URL_API,
     });
   }
 }

@@ -5,6 +5,13 @@ import store from "./store";
 import Default from "@/layouts/Default.vue";
 import Paginate from "vuejs-paginate";
 
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
+
+Vue.use(Loading);
+
+Vue.component("loading", Loading);
+
 import VuePlyr from "vue-plyr";
 import "vue-plyr/dist/vue-plyr.css";
 

@@ -4,3 +4,4 @@ declare module "*.vue" {
 }
 declare module "vuejs-paginate";
 declare module "vue-plyr";
+declare module "vue-loading-overlay";

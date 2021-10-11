@@ -1,6 +1,13 @@
 <template>
   <Default>
     <div>
+      <!-- <loading
+        :active="!SocketConnected"
+        :opacity="0.8"
+        loader="bars"
+        :can-cancel="false"
+        :is-full-page="true"
+      ></loading> -->
       <main class="mt-5">
         <section class="m-section">
           <div class="container">
@@ -84,7 +91,7 @@
                 >
                   <div class="article article-video">
                     <!-- <yanVideo :sources="getSource(video.url)"></yanVideo> -->
-                    <yanVideo></yanVideo>
+                    <yanVideo :source="getSource(video.url)"></yanVideo>
 
                     <div class="description">
                       <div class="meta">
@@ -193,6 +200,7 @@ export default Vue.extend({
       nom: null as unknown as string,
       message: null as unknown as string,
       email: null as unknown as string,
+      SocketConnected: false,
     };
   },
   filters: {

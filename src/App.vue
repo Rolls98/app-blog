@@ -9,6 +9,8 @@
 import Vue from "vue";
 export default Vue.extend({
   async beforeMount(): Promise<void> {
+    console.log(process.env, "base url");
+
     await Promise.all([
       this.$store.dispatch("websiteModule/fetchArticles"),
       this.$store.dispatch("websiteModule/fetchVideos"),
