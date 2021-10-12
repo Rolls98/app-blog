@@ -179,7 +179,7 @@ export default Vue.extend({
         year: "numeric",
       });
     },
-    async localSearch(e) {
+    async localSearch(e: any) {
       e.preventDefault();
       if (this.search.length >= 1) {
         await this.searchVideos();

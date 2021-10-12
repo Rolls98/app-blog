@@ -179,7 +179,7 @@ export default Vue.extend({
     return {
       video: {} as Ivideo,
       // comments: [] as ICommentVideo[],
-      comments: [] as ICommentResponse[],
+      comments: [] as any,
       author: null as unknown as string,
       message: null as unknown as string,
       isSearch: false,
@@ -204,12 +204,12 @@ export default Vue.extend({
     categories(): Icategorie[] {
       return this.$store.getters["websiteModule/categories"];
     },
-    id() {
+    id(): string {
       return this.$route.params.id;
     },
   },
   methods: {
-    async localSearch(e) {
+    async localSearch(e: any) {
       e.preventDefault();
       if (this.search.length >= 1) {
         await this.searchVideos();
@@ -296,11 +296,11 @@ export default Vue.extend({
     async getVideo(): Promise<void> {
       let myId = parseInt(this.$route.params.id);
       const userService = new AppService();
-      const result = await userService.getOneVideo({ id: myId.toString() });
+      const result = await userService.getOneVideo({ id: myId });
 
       if (!result.status) {
         // console.log(result);
-        this.video = result as Ivideo;
+        this.video = result as any;
       } else {
         console.log("Erreur");
       }
@@ -309,7 +309,7 @@ export default Vue.extend({
       let myId = parseInt(this.$route.params.id);
       const userService = new AppService();
       const result = await userService.getCommentsVideo({
-        id: myId.toString(),
+        id: myId,
       });
 
       if (!result.status) {

@@ -184,7 +184,7 @@ export default Vue.extend({
   data() {
     return {
       article: {} as IArticle,
-      comments: [] as ICommentResponse[],
+      comments: [] as any,
       author: null as unknown as string,
       message: null as unknown as string,
       action: "Envoyer",
@@ -224,7 +224,7 @@ export default Vue.extend({
         params: { id: myId.toString() },
       });
     },
-    async localSearch(e) {
+    async localSearch(e: any) {
       e.preventDefault();
       if (this.search.length >= 1) {
         await this.searchArticles();
@@ -250,11 +250,11 @@ export default Vue.extend({
       console.log(myId);
 
       const userService = new AppService();
-      const result = await userService.getOneArticle({ id: myId.toString() });
+      const result = await userService.getOneArticle({ id: myId });
 
       if (!result.status) {
         // console.log(result);
-        this.article = result as IArticle;
+        this.article = result as any;
         console.log(result);
       } else {
         console.log("Erreur");
@@ -266,7 +266,7 @@ export default Vue.extend({
 
       const userService = new AppService();
       const result = await userService.getCommentsArticle({
-        id: myId.toString(),
+        id: myId,
       });
 
       if (!result.status) {
