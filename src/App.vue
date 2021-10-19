@@ -1,5 +1,12 @@
 <template>
   <div id="app">
+    <loading
+      :active="!SocketConnected"
+      :opacity="0.8"
+      loader="bars"
+      :can-cancel="false"
+      :is-full-page="true"
+    ></loading>
     <router-view />
   </div>
 </template>
@@ -8,6 +15,11 @@
 <script lang="ts">
 import Vue from "vue";
 export default Vue.extend({
+  data() {
+    return {
+      SocketConnected: false,
+    };
+  },
   async beforeMount(): Promise<void> {
     console.log(process.env, "base url");
 
@@ -19,6 +31,7 @@ export default Vue.extend({
       // this.$store.dispatch("websiteModule/fetchArticles"),
       // this.$store.dispatch("websiteModule/fetchVideos"),
     ]);
+    this.SocketConnected = true;
     // console.log(this.$store.getters["websiteModule/articles"]);
   },
 });

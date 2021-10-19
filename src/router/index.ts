@@ -25,7 +25,7 @@ const routes: Array<RouteConfig> = [
     component: Blog,
   },
   {
-    path: "/Videos/:id",
+    path: "/Video/:id",
     name: "Video",
     component: Video,
   },

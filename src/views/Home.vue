@@ -90,8 +90,8 @@
                   :to="{ name: 'Video', params: { id: video.id } }"
                 >
                   <div class="article article-video">
-                    <!-- <yanVideo :sources="getSource(video.url)"></yanVideo> -->
-                    <yanVideo :source="getSource(video.url)"></yanVideo>
+                    <!-- <yanVideo :source="video.url"></yanVideo> -->
+                    <yanVideo :source="video.url"></yanVideo>
 
                     <div class="description">
                       <div class="meta">
@@ -221,15 +221,7 @@ export default Vue.extend({
         year: "numeric",
       });
     },
-    getSource(url: string): any {
-      return [
-        {
-          type: "video/mp4",
-          // src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
-          src: url,
-        },
-      ];
-    },
+
     async checkForm(e: any) {
       e.preventDefault();
       this.isDisabled = true;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- video element -->
-    <vue-plyr :options="options" v-if="renderComponent">
+    <vue-plyr :options="options">
       <video controls playsinline data-poster="poster.jpg">
         <source :src="test" type="video/mp4" />
       </video>
@@ -21,22 +21,24 @@ export default Vue.extend({
   },
   props: {
     source: {
-      type: Array,
+      type: String,
       required: true,
     },
   },
   methods: {
     forceRerender() {
+      console.log(this.source, "ringo ringo");
+      this.test = this.source;
       // Remove my-component from the DOM
       this.renderComponent = false;
 
       // If you like promises better you can
       // also use nextTick this way
-      this.test = this.source[0].src;
+      // this.test = this.source[0].src;
       console.log(this.source, "test test");
       this.$nextTick().then(() => {
         // Add the component back in
-        this.test = this.source[0].src;
+
         // ("https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm");
         // "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm";
 
@@ -46,6 +48,7 @@ export default Vue.extend({
   },
   mounted() {
     this.$refs.plyr.player.on("event", () => console.log("event fired"));
+    this.test = this.source;
   },
   beforeMount() {
     // this.test = this.source.src;

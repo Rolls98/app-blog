@@ -11,7 +11,7 @@
                   class="article article-video"
                   @click="localRoute(video.id)"
                 >
-                  <yanVideo :sources="getSource(video.url)"></yanVideo>
+                  <yanVideo :source="video.url"></yanVideo>
                   <!-- <yanVideo></yanVideo> -->
                   <div class="description">
                     <div class="meta">

@@ -21,9 +21,9 @@
                         share</span
                       >
                     </div>
-                    <div class="illustration">
-                      <!-- <yanVideo :sources="getSource(video.url)"></yanVideo> -->
-                      <yanVideo :source="getSource(video.url)"></yanVideo>
+                    <div class="illustration" v-if="video.url">
+                      <!-- <yanVideo :source="video.url"></yanVideo> -->
+                      <yanVideo :source="video.url"></yanVideo>
                     </div>
                     <div class="description">
                       <p>
@@ -112,7 +112,7 @@
                 <a href="">
                   <div class="recents d-flex">
                     <div class="img-r">
-                      <yanVideo :sources="getSource(video.url)"></yanVideo>
+                      <yanVideo :source="video.url"></yanVideo>
                       <!-- <yanVideo></yanVideo> -->
                     </div>
                     <p>Lorem ipsum dolor ipsum dolor sit amettyyrty.</p>
@@ -207,6 +207,14 @@ export default Vue.extend({
     id(): string {
       return this.$route.params.id;
     },
+    // getSource(url: string): any {
+    //   return [
+    //     {
+    //       type: "video/mp4",
+    //       src: url,
+    //     },
+    //   ];
+    // },
   },
   methods: {
     async localSearch(e: any) {
@@ -239,14 +247,7 @@ export default Vue.extend({
         console.log("Erreur");
       }
     },
-    getSource(url: string): any {
-      return [
-        {
-          type: "video/mp4",
-          src: url,
-        },
-      ];
-    },
+
     async postCommentVideo(): Promise<void> {
       let myId = this.$route.params.id;
       let data = {
@@ -299,7 +300,7 @@ export default Vue.extend({
       const result = await userService.getOneVideo({ id: myId });
 
       if (!result.status) {
-        // console.log(result);
+        console.log(result, "api result");
         this.video = result as any;
       } else {
         console.log("Erreur");
